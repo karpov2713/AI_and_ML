@@ -1,24 +1,36 @@
-import matplotlib.pylab as plt
 import numpy as np
 
-x = np.arange(-8, 8, 0.1)
-# f = 1 / (1 + np.exp(-x))
-# plt.plot(x, f)
-# plt.xlabel('x')
-# plt.ylabel('f(y)')
-# plt.show()
 
-f = None
-w1 = 0.5
-w2 = 1.0
-w3 = 2.0
-l1 = 'w = 0.5'
-l2 = 'w = 1.0'
-l3 = 'w = 2.0'
-for w, l in [(w1, l1), (w2, l2), (w3, l3)]:
-    f = 1 / (1 + np.exp(-x * w))
-plt.plot(x, f, label = l)
-plt.xlabel('x')
-plt.ylabel('h_w(x)')
-plt.legend(loc=2)
-plt.show()
+def act(x):
+    return 0 if x < 0.5 else 1
+
+
+def go(house, rock, attr):
+    x = np.array([house, rock, attr])
+    w11 = [0.3, 0.3, 0]
+    w12 = [0.4, -0.5, 1]
+    weight1 = np.array([w11, w12])
+    weight2 = np.array([-1, 1])
+
+    sum_hidden = np.dot(weight1, x)
+    print("Значения сумм на нейронах скрытого слоя: " + str(sum_hidden))
+
+    out_hidden = np.array([act(x) for x in sum_hidden])
+    print("Значения на выходах нейронов скрытого слоя: " + str(out_hidden))
+
+    sum_end = np.dot(weight2, out_hidden)
+    y = act(sum_end)
+    print("Выходное значение НС: " + str(y))
+
+    return y
+
+
+house = 1
+rock = 0
+attr = 0
+
+res = go(house, rock, attr)
+if res == 1:
+    print("Ты мне нравишься")
+else:
+    print("Созвонимся")
